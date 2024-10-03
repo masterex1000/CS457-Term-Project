@@ -5,6 +5,8 @@ This is a simple multiplayer Battleship game implemented using Python and socket
 Its built on a client-server archetecture, and allows multiple concurrent games
 to be ran on a single server
 
+*NOTE* Currently there is no game implemented
+
 **How to play:**
 1. **Start the server:** Run the `server.py` script.
 2. **Connect clients:** Run the `client.py` script on two different machines or terminals.
