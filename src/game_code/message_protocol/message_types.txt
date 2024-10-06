@@ -1,0 +1,5 @@
+We'll need to define several message types for this assignment.
+What messages do we need to pass?
+How are messages passed?
+We need to send/recv for each message type
+Who is listening for each message? 
