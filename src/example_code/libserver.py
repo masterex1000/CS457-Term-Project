@@ -107,7 +107,7 @@ class Message:
 
     def _create_response_binary_content(self):
         action = str(self.request[:6], "utf-8")
-        
+
         if action == "negate" or action == "double":
             action_b, value = struct.unpack(">6si", self.request)
 
@@ -115,7 +115,7 @@ class Message:
                 value *= -1
             elif action == "double":
                 value *= 2
-            
+
             response = {
                 "content_bytes": b"First 10 bytes of request: "
                 + self.request[:10],
@@ -123,7 +123,7 @@ class Message:
                 "content_encoding": "binary",
             }
             return response
-            
+
         response = {
             "content_bytes": b"First 10 bytes of request: "
             + self.request[:10],
