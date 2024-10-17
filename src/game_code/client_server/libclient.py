@@ -6,7 +6,7 @@ import io
 import struct
 
 
-class Message:
+class Connection:
     def __init__(self, selector, sock, addr, request):
         self.selector = selector
         self.sock = sock

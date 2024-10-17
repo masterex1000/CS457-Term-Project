@@ -32,7 +32,7 @@ def start_connection(host, port, request):
     sock.setblocking(False)
     sock.connect_ex(addr)
     events = selectors.EVENT_READ | selectors.EVENT_WRITE
-    message = libclient.Message(sel, sock, addr, request)
+    message = libclient.Connection(sel, sock, addr, request)
     sel.register(sock, events, data=message)
 
 
@@ -49,15 +49,15 @@ try:
     while True:
         events = sel.select(timeout=1)
         for key, mask in events:
-            message = key.data
+            conn = key.data
             try:
-                message.process_events(mask)
+                conn.process_events(mask)
             except Exception:
                 print(
                     "main: error: exception for",
-                    f"{message.addr}:\n{traceback.format_exc()}",
+                    f"{conn.addr}:\n{traceback.format_exc()}",
                 )
-                message.close()
+                conn.close()
         # Check for a socket being monitored to continue.
         if not sel.get_map():
             break

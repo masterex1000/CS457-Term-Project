@@ -19,7 +19,7 @@ def accept_wrapper(sock):
     conn, addr = sock.accept()  # Should be ready to read
     print("accepted connection from", addr)
     conn.setblocking(False)
-    message = libserver.Message(sel, conn, addr)
+    message = libserver.Connection(sel, conn, addr)
     sel.register(conn, selectors.EVENT_READ, data=message)
 
 
@@ -44,15 +44,15 @@ try:
             if key.data is None:
                 accept_wrapper(key.fileobj)
             else:
-                message = key.data
+                connection = key.data
                 try:
-                    message.process_events(mask)
+                    connection.process_events(mask)
                 except Exception:
                     print(
                         "main: error: exception for",
-                        f"{message.addr}:\n{traceback.format_exc()}",
+                        f"{connection.addr}:\n{traceback.format_exc()}",
                     )
-                    message.close()
+                    connection.close()
 except KeyboardInterrupt:
     print("caught keyboard interrupt, exiting")
 finally:
