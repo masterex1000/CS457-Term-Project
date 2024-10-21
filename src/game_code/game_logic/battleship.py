@@ -14,7 +14,7 @@ utils.print_board(OPPONENT_GAME_BOARD)
 
 # What do I need to make this work?
 # - Place ships (orientation?)
-test_ship = Ship("Battleship", "H", 0, 0, utils.BOARD_DIMENSIONS)
+test_ship = Ship("Battleship", "N", 0, 0, utils.BOARD_DIMENSIONS)
 print(test_ship)
 utils.place_ship(PLAYER_GAME_BOARD, test_ship)
 utils.print_board(PLAYER_GAME_BOARD)
