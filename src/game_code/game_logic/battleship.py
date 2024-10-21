@@ -46,6 +46,11 @@ def setup_board():
         new_ship = Ship(ship_type, orientation, x, y)
         utils.place_ship(PLAYER_GAME_BOARD, new_ship)
 
+
+def get_updated_board_state():
+    """ Requests from the server the updated board state. Generally called at the beginning of the player's turn. """
+    return NotImplemented
+
 def player_turn():
     """ Player turn logic """
     if IS_PLAYER_TURN:
@@ -54,6 +59,7 @@ def player_turn():
 
         if ALL_SHIPS_PLACED:
             try:
+                #get_updated_board_state()
                 # guess
                 print("Enter guess X coordinate: ")
                 x = int(input())
