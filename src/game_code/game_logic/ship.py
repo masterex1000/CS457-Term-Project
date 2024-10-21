@@ -19,10 +19,11 @@ class Ship:
     """
     # state vars
     _type = ""
-    _length = 0
+    _length = -1
     _orientation = '$'
-    _bow_position = (0,0)
+    _bow_position = (-1,-1)
     _floating = False
+    _hp = -1
     
     # parameterized ctor
     def __init__(self, ship_type, orientation, bow_pos_x, bow_pos_y, board_dim=10):
@@ -34,33 +35,43 @@ class Ship:
         assert bow_pos_x < board_dim
         assert bow_pos_y < board_dim
 
-        self.type = ship_type
-        self.length = SHIP_TYPES[ship_type] # ship length is the value, type is the key
-        self.orientation = orientation.lower()
-        self.bow_position = (bow_pos_x, bow_pos_y)
+        self._type = ship_type
+        self._length = SHIP_TYPES[ship_type] # ship length is the value, type is the key
+        self._orientation = orientation.lower()
+        self._bow_position = (bow_pos_x, bow_pos_y)
+        self._hp = self._length
 
         if orientation == 'n':
-            for i in range(self.length):
-                if self.bow_position[1] - i < 0:
+            for i in range(self._length):
+                if self._bow_position[1] - i < 0:
                     print("Invalid ship placement")
-                    exit(-1)
 
         elif orientation == 'e':
-            for i in range(self.length):
-                if self.bow_position[0] + i >= board_dim:
+            for i in range(self._length):
+                if self._bow_position[0] + i >= board_dim:
                     print("Invalid ship placement")
 
         elif orientation == 's':
-            for i in range(self.length):
-                if self.bow_position[1] + i >= board_dim:
+            for i in range(self._length):
+                if self._bow_position[1] + i >= board_dim:
                     print("Invalid ship placement")
 
         elif orientation == 'w':
-            for i in range(self.length):
-                if self.bow_position[0] - i < board_dim:
+            for i in range(self._length):
+                if self._bow_position[0] - i < board_dim:
                     print("Invalid ship placement")
-
+        else:
+            # Ship is in bounds according to it's orientation
+            self._floating=True
 
     def __repr__(self):
         """ repr is used for printing objects """
-        return f"Ship: {self.type}\nLength: {self.length}\nOrientation: {self.orientation}\nBow Position: {self.bow_position}\n"
+        return f"Ship: {self._type}\nLength: {self._length}\nOrientation: {self._orientation}\nBow Position: {self._bow_position}\n"
+
+    def is_floating(self):
+        return self._floating
+
+    def hit(self):
+        self._hp -= 1
+        if self._hp == 0:
+            self._floating = False
