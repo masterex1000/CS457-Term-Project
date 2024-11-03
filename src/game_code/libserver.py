@@ -19,7 +19,7 @@ class ServerConnection(Connection):
         messageModule, messageAction = action.split('.')
 
         if messageModule == "lobby":
-            self.handleLobbyMessage(messageAction, message)
+            self.handle_lobby_message(messageAction, message)
         else:  # Old handling, keeping for debug reasons
             if action == "message":
                 msg = message.get("value")
@@ -29,13 +29,13 @@ class ServerConnection(Connection):
 
             self.send_message(content)
 
-    def handleLobbyMessage(self, messageAction, message):
-        if messageAction == 'getLobbyList':
+    def handle_lobby_message(self, messageAction, message):
+        if messageAction == 'get_lobby_list':
             lobbies = [{'name': lobby.lobbyName,
                         "currentPlayers": lobby.currentPlayers,
                         "maxPlayers": lobby.maxPlayers,
                         "lobbyId": lobby.lobbyId}
-                        for lobby in lobby_manager.getLobbyList()]
+                       for lobby in lobby_manager.get_lobby_list()]
 
             self.send_message({"action": "lobby.lobbyList", "lobbies": lobbies})
             pass

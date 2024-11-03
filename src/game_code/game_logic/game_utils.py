@@ -112,7 +112,7 @@ def guess(board, x_y):
         return False
     # guess
     loc = board[y][x]
-    hit = loc=="$"
+    hit = loc==SHIP_CHARACTER
 
     # check
     if hit:

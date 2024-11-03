@@ -13,13 +13,13 @@ class Game:
     _PLAYER2 = None
     _BATTLESHIP = None
 
-    def __init__(self, p1, p2):
-        self._GAME_ID = random.randrange(1000000)
+    def __init__(self, game_id, p1, p2):
+        self._GAME_ID = game_id
         self._PLAYER1 = p1
         self._PLAYER2 = p2
 
     def start(self, player):
-        """ Starts the game with the specified player"""
+        """ Starts the game with the specified player going first"""
         print("")
 
     def start_game(self):
@@ -27,6 +27,7 @@ class Game:
         coin_toss = os.urandom(self._GAME_ID) % 2
         if coin_toss % 2 == 0:
             print("Player 1 wins the coin toss.")
+            self.start(self._PLAYER1)
         else:
             print("Player 2 wins the coin toss.")
-
+            self.start(self._PLAYER2)

@@ -22,7 +22,10 @@ Every message is sent using the json packet system described in our example code
 We'll use the `action` field as the specifier for what the packet is doing, which will then
 route it internally. 
 
-Every one of the following actions are prefixed with their "category" name, eg. the lobby packet "getLobbyList" will have the action name of `"action":"lobby.getLobbyList"`. This makes it possible to quickly route packets to various functions/handlers by just testing for the `lobby.` substring.
+Every one of the following actions are prefixed with their "category" name, 
+eg. the lobby packet "getLobbyList" will have the action name of `"action":"lobby.getLobbyList"`. 
+This makes it possible to quickly route packets to various functions/handlers 
+just by testing for the `lobby.` substring.
 
 # Lobby : `lobby.*`
  - getLobbyList (c->s)
@@ -40,11 +43,11 @@ Every one of the following actions are prefixed with their "category" name, eg. 
 
 # Game `game.*`
  - gameStart (server -> client)
-  - game_id
+ - game_id
  - submitBoard (c->s)
  - beginTurn (s->c) - Tells client their turn is beginning
  - makeGuess (c->s)  - Implicit End of turn
- - endTurn (c->s) - Telling the server the client it done with their move
+ - endTurn (c->s) - Telling the server the client is done with their move
  - updateBoard (s->c) - Updating client side board with new data
  - gameEnd (s->c)
-    - who one?
+    - who won?

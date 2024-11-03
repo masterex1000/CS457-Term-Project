@@ -1,13 +1,14 @@
 We'll need to define several message types for this assignment.
 What messages do we need to pass?
     - Client <--- signal messages ---> Server
+    - Client <--- chat message ---> Server
     - Client --- guess ---> Server
     - Client <--- update board state ---> Server
 
 How are messages passed?
     - Messages are passed between Clients and the Server as data objects using sockets (TCP)
     - Serialization will be as handled cleanly and efficiently as possible
-    -- Json based?
+    -- Json based
 
 How are messages handled?
     - These messages will go into an event queue and be processed by the respective server or client as events
