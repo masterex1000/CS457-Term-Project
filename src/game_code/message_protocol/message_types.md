@@ -16,7 +16,15 @@ We'll need to define several message types for this assignment.
     - These messages will go into an event queue and be processed by the respective server or client as events
     - Client and Server will consistently poll their event queue and take action depending on the event recieved
 
-# Lobby
+## General Message Format
+
+Every message is sent using the json packet system described in our example code.
+We'll use the `action` field as the specifier for what the packet is doing, which will then
+route it internally. 
+
+Every one of the following actions are prefixed with their "category" name, eg. the lobby packet "getLobbyList" will have the action name of `"action":"lobby.getLobbyList"`. This makes it possible to quickly route packets to various functions/handlers by just testing for the `lobby.` substring.
+
+# Lobby : `lobby.*`
  - getLobbyList (c->s)
  - lobbyList (s->c)
     - Lobby[] lobby_ids
@@ -30,7 +38,7 @@ We'll need to define several message types for this assignment.
  - startGame (c->s)
     - lobbyTicket
 
-# Game
+# Game `game.*`
  - gameStart (server -> client)
   - game_id
  - submitBoard (c->s)

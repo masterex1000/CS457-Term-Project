@@ -5,5 +5,5 @@ from lobby import GameLobby
 
 lobbies : List[GameLobby] = []
 
-def getLobbyList(hasOpenSlot = True) -> List[GameLobby]:
-    pass
+def getLobbyList(hasOpenSlot = False) -> List[GameLobby]:
+    return [lobby for lobby in lobbies if (not hasOpenSlot or lobby.hasOpenSlot())]
