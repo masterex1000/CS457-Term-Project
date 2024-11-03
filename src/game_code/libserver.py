@@ -50,25 +50,6 @@ class ServerConnection(Connection):
 
         self._write()
 
-    def process_request(self):
-        content_len = self.jsonheader["content-length"]
-        if not len(self._recv_buffer) >= content_len:
-            return
-        data = self._recv_buffer[:content_len]
-        self._recv_buffer = self._recv_buffer[content_len:]
-        if self.jsonheader["content-type"] == "text/json":
-            encoding = self.jsonheader["content-encoding"]
-            self.request = Message.json_decode(data, encoding)
-            print("received request", repr(self.request), "from", self.addr)
-        else:
-            # Binary or unknown content-type
-            self.request = data
-            print(
-                f'received {self.jsonheader["content-type"]} request from',
-                self.addr,
-            )
-        # Set selector to listen for write events, we're done reading.
-        self._set_selector_events_mask("w")
 
     def create_response(self):
         response = self._create_response_json_content()

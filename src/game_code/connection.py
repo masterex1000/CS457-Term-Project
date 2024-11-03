@@ -13,6 +13,10 @@ class Connection:
         self._send_buffer = b""
         self._jsonheader_len = None
         self.jsonheader = None
+        
+        self.response = None
+        self._request_queued = False
+        self.request = None
     
     def _set_selector_events_mask(self, mode):
         """Set selector to listen for events: mode is 'r', 'w', or 'rw'."""
@@ -20,7 +24,7 @@ class Connection:
             events = selectors.EVENT_READ
         elif mode == "w":
             events = selectors.EVENT_WRITE
-        elif mode == "rw":
+        elif mode == "rw" or mode == "wr":
             events = selectors.EVENT_READ | selectors.EVENT_WRITE
         else:
             raise ValueError(f"Invalid events mask mode {repr(mode)}.")
@@ -122,3 +126,45 @@ class Connection:
             ):
                 if reqhdr not in self.jsonheader:
                     raise ValueError(f'Missing required header "{reqhdr}".')
+    
+    def process_request(self):
+        content_len = self.jsonheader["content-length"]
+        if not len(self._recv_buffer) >= content_len:
+            return
+        data = self._recv_buffer[:content_len]
+        self._recv_buffer = self._recv_buffer[content_len:]
+        if self.jsonheader["content-type"] == "text/json":
+            encoding = self.jsonheader["content-encoding"]
+            self.request = Message.json_decode(data, encoding)
+            print("received request", repr(self.request), "from", self.addr)
+        else:
+            # Binary or unknown content-type
+            self.request = data
+            print(
+                f'received {self.jsonheader["content-type"]} request from',
+                self.addr,
+            )
+        # Set selector to listen for write events, we're done reading.
+        self._set_selector_events_mask("w")
+        
+    def process_response(self):
+        content_len = self.jsonheader["content-length"]
+        if not len(self._recv_buffer) >= content_len:
+            return
+        data = self._recv_buffer[:content_len]
+        self._recv_buffer = self._recv_buffer[content_len:]
+        if self.jsonheader["content-type"] == "text/json":
+            encoding = self.jsonheader["content-encoding"]
+            self.response = Message.json_decode(data, encoding)
+            print("received response", repr(self.response), "from", self.addr)
+            self._process_response_json_content()
+        else:
+            # Binary or unknown content-type
+            self.response = data
+            print(
+                f'received {self.jsonheader["content-type"]} response from',
+                self.addr,
+            )
+            self._process_response_binary_content()
+        # Close when response has been processed
+        # self.close()

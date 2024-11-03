@@ -13,7 +13,7 @@ class ClientConnection(Connection):
         
         self.response = None
         self._request_queued = False
-        self.request = request
+        # self.request = request
 
     def _process_response_json_content(self):
         content = self.response
@@ -54,25 +54,3 @@ class ClientConnection(Connection):
         message = Message.create_message(**req)
         self._send_buffer += message
         self._request_queued = True
-
-    def process_response(self):
-        content_len = self.jsonheader["content-length"]
-        if not len(self._recv_buffer) >= content_len:
-            return
-        data = self._recv_buffer[:content_len]
-        self._recv_buffer = self._recv_buffer[content_len:]
-        if self.jsonheader["content-type"] == "text/json":
-            encoding = self.jsonheader["content-encoding"]
-            self.response = Message.json_decode(data, encoding)
-            print("received response", repr(self.response), "from", self.addr)
-            self._process_response_json_content()
-        else:
-            # Binary or unknown content-type
-            self.response = data
-            print(
-                f'received {self.jsonheader["content-type"]} response from',
-                self.addr,
-            )
-            self._process_response_binary_content()
-        # Close when response has been processed
-        self.close()
