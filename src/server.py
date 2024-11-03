@@ -14,7 +14,6 @@ import libserver
 
 sel = selectors.DefaultSelector()
 
-
 def accept_wrapper(sock):
     conn, addr = sock.accept()  # Should be ready to read
     print("accepted connection from", addr)

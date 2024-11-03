@@ -20,6 +20,8 @@ class Connection:
         
         self.send_queue = []
         self.recv_queue = []
+        
+        self.on_connection()
     
     def _set_selector_events_mask(self, mode):
         """Set selector to listen for events: mode is 'r', 'w', or 'rw'."""
@@ -157,8 +159,8 @@ class Connection:
             
             print(f"got response: {repr(data)}. Binary format currently unsupported. Ignoring")
     
-    # Sends the given message to the peer
-    def send_message(self, content):
+    def send_message(self, content: dict):
+        '''Sends the given message dictionary to the peer'''
         content_encoding = "utf-8"
         response = {
             "content_bytes": Message.json_encode(content, content_encoding),
@@ -173,6 +175,15 @@ class Connection:
         
         self._send_buffer += message
     
+    def respond_to_message(self, originalMessage: dict, content: dict):
+        '''Wrapper around send_message that injects the "i" field used to identify a response to a specific transaction id'''
+        self.send_message({**content, "i": originalMessage.get("i", -1)})
+    
     # Called for every received message from the peer.
-    def on_message(self, message):
+    def on_message(self, message: dict):
+        '''Called once for every received message from the peer'''
+        pass
+    
+    def on_connection(self):
+        '''Called once when the client first connects to the server'''
         pass

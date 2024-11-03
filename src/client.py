@@ -6,6 +6,7 @@
 
 #!/usr/bin/env python3
 
+import asyncio
 import sys
 import socket
 import selectors
@@ -26,7 +27,7 @@ def start_connection(host, port):
     message = libclient.ClientConnection(sel, sock, addr)
     sel.register(sock, events, data=message)
     
-    message.send_message({'action': "message", 'value': 'blah'}) # Queue our first message
+    message.send_message({'action': "debug.message", 'value': 'blah'}) # Queue our first message
 
 if len(sys.argv) != 3:
     print("usage:", sys.argv[0], "<host> <port>")
@@ -56,3 +57,9 @@ except KeyboardInterrupt:
     print("caught keyboard interrupt, exiting")
 finally:
     sel.close()
+
+async def main():
+    
+
+if __name__ == "__main__":
+    asyncio.run(main())

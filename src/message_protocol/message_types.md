@@ -28,10 +28,15 @@ Every one of the following actions are prefixed with their "category" name, eg. 
  - getLobbyList (c->s)
  - lobbyList (s->c)
     - Lobby[] lobby_ids
+ - createLobby (c->s)
+   - String name
+   - int maxPlayers (must be greater than 2)
  - joinLobby (c->s)
     - returns lobby_ticket
  - leaveLobby (c->s)
     - lobbyTicket
+ - updateLobbyUsers (s->c)
+   -  string 
  - chatMessage (c->s, s->c)
     - lobbyTicket
     - String message

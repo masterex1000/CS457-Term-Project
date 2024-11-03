@@ -4,7 +4,6 @@ import json
 import io
 import struct
 
-
 class Message:
     def json_encode(obj, encoding):
         return json.dumps(obj, ensure_ascii=False).encode(encoding)
