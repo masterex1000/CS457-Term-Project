@@ -17,6 +17,9 @@ class Connection:
         self.response = None
         self._request_queued = False
         self.request = None
+        
+        self.send_queue = []
+        self.recv_queue = []
     
     def _set_selector_events_mask(self, mode):
         """Set selector to listen for events: mode is 'r', 'w', or 'rw'."""
@@ -56,16 +59,19 @@ class Connection:
                 pass
             else:
                 self._send_buffer = self._send_buffer[sent:]
-                
-                # # Close when the buffer is drained. The response has been sent.
-                # if sent and not self._send_buffer:
-                #     self.close()
+        
+        # Our buffer is empty, we no longer care abour write events
+        if len(self._send_buffer) == 0:
+            self._set_selector_events_mask("r")
                 
     def process_events(self, mask):
         if mask & selectors.EVENT_READ:
             self.read()
         if mask & selectors.EVENT_WRITE:
             self.write()
+            
+    def write(self):
+        self._write()
     
     # Called whenever we need to read data
     def read(self):
@@ -80,7 +86,7 @@ class Connection:
 
         if self.jsonheader:
             if self.response is None:
-                self.process_response()
+                self.process_message()
     
     def close(self):
         print("closing connection to", self.addr)
@@ -127,44 +133,46 @@ class Connection:
                 if reqhdr not in self.jsonheader:
                     raise ValueError(f'Missing required header "{reqhdr}".')
     
-    def process_request(self):
+    def process_message(self):
         content_len = self.jsonheader["content-length"]
-        if not len(self._recv_buffer) >= content_len:
-            return
-        data = self._recv_buffer[:content_len]
-        self._recv_buffer = self._recv_buffer[content_len:]
-        if self.jsonheader["content-type"] == "text/json":
-            encoding = self.jsonheader["content-encoding"]
-            self.request = Message.json_decode(data, encoding)
-            print("received request", repr(self.request), "from", self.addr)
-        else:
-            # Binary or unknown content-type
-            self.request = data
-            print(
-                f'received {self.jsonheader["content-type"]} request from',
-                self.addr,
-            )
-        # Set selector to listen for write events, we're done reading.
-        self._set_selector_events_mask("w")
         
-    def process_response(self):
-        content_len = self.jsonheader["content-length"]
         if not len(self._recv_buffer) >= content_len:
             return
+        
         data = self._recv_buffer[:content_len]
         self._recv_buffer = self._recv_buffer[content_len:]
+        
         if self.jsonheader["content-type"] == "text/json":
             encoding = self.jsonheader["content-encoding"]
-            self.response = Message.json_decode(data, encoding)
-            print("received response", repr(self.response), "from", self.addr)
-            self._process_response_json_content()
+            response = Message.json_decode(data, encoding)
+            print("received response", repr(response), "from", self.addr)
+
+            self.on_message(response)
         else:
             # Binary or unknown content-type
-            self.response = data
             print(
                 f'received {self.jsonheader["content-type"]} response from',
                 self.addr,
             )
-            self._process_response_binary_content()
-        # Close when response has been processed
-        # self.close()
+            
+            print(f"got response: {repr(data)}. Binary format currently unsupported. Ignoring")
+    
+    # Sends the given message to the peer
+    def send_message(self, content):
+        content_encoding = "utf-8"
+        response = {
+            "content_bytes": Message.json_encode(content, content_encoding),
+            "content_type": "text/json",
+            "content_encoding": content_encoding,
+        }
+        
+        message = Message.create_message(**response)
+        
+        if len(message) > 0 and len(self._send_buffer) == 0:
+            self._set_selector_events_mask("rw") # We care about write events now
+        
+        self._send_buffer += message
+    
+    # Called for every received message from the peer.
+    def on_message(self, message):
+        pass
