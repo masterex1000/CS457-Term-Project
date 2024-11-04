@@ -17,16 +17,16 @@ class ConnectUserRequest(Event, Message):
 
 class ConnectUserResponse(Event, Message):
     """ User connection response """
-    def __init__(self,  user_id, username, status="Connection Failed!!!"):
+    def __init__(self,  user_id, username, success=False):
         self.user_id = user_id
         self.username = username
-        self.status = status
+        self.success = success
 
     @property
     def action(self):
         return "connect_user"
     def to_dict(self):
-        return dict(action=self.action, username=self.username, status=self.status)
+        return dict(action=self.action, username=self.username, success=self.success)
 # end class def
 
 class DisconnectUserRequest(Event, Message):
@@ -80,15 +80,11 @@ class LobbyListResponse(Event, Message):
     def action(self):
         return "lobby_list"
     def to_dict(self):
-        return {
-            "action": self.action,
-            "success":self.success,
-            "list": self.lobby_list
-        }
+        return dict(action=self.action, lobby_list=self.lobby_list, success=False)
 # end class def
 
 class JoinLobbyRequest(Event, Message):
-    """ Client request to join a specified lobby"""
+    """ Client request to join a specified lobby """
     def __init__(self, lobby_id, show_username=False):
         self.lobby_id = lobby_id
         self.show_username=show_username
@@ -97,12 +93,7 @@ class JoinLobbyRequest(Event, Message):
     def action(self):
         return "join_lobby"
     def to_dict(self):
-        d = {
-            "action": self.action,
-            "lobby_id": self.lobby_id,
-            "show_username": self.show_username
-        }
-        return d
+        return dict(action=self.action, lobby_id=self.lobby_id, show_username=self.show_username)
 # end class def
 
 class JoinLobbyResponse(Event, Message):
@@ -116,5 +107,35 @@ class JoinLobbyResponse(Event, Message):
     def action(self):
         return "join_lobby"
     def to_dict(self):
-        return { "action": self.action, "lobby_id": self.lobby_id, "success": self.success }
+        return dict(action=self.action, lobby_id=self.lobby_id, success=self.success)
 # end class def
+
+class StartGameRequest(Event, Message):
+    """ Client signals that it is ready to start the game """
+    def __init__(self, user_id, user_token, lobby_id=0, lobby_token=0):
+        self.user_id=user_id
+        self.user_token=user_token
+        self.lobby_id=lobby_id
+        self.lobby_token=lobby_token
+
+    @property
+    def action(self):
+        return "start_game"
+    def to_dict(self):
+        return dict(user_id=self.user_id, user_token=self.user_token, lobby_id=self.lobby_id, lobby_token=self.lobby_token)
+
+
+class ChatMessageRequest(Event, Message):
+    def __init__(self, user_id, user_token, lobby_id, lobby_token, message, checksum):
+        self.user_id=user_id
+        self.user_token=user_token
+        self.lobby_id=lobby_id
+        self.lobby_token=lobby_token
+        self.message=message
+        self.checksum=checksum
+
+    @property
+    def action(self):
+        return "chat_message"
+    def to_dict(self):
+        return dict(user_id)

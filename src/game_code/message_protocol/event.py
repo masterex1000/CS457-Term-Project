@@ -10,5 +10,13 @@ class Event(ABC):
     @property
     @abstractmethod
     def action(self):
-        """ The action property specifies the type of event"""
+        """ The action property specifies the type of event """
+        return NotImplemented
+
+    @abstractmethod
+    def to_dict(self):
+        """
+        Useful method to have, especially since we're using json format for messages
+         Python dicts are effectively json syntax
+        """
         return NotImplemented

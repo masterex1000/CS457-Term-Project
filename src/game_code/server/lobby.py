@@ -44,13 +44,7 @@ class GameLobby:
 
         event_type = self._parse_event_type(event)
 
-        # Events:
-        if event_type == "connect_user":
-            self._connect_user(event)
-
-        if event_type == "disconnect_user":
-            self._disconnect_user(event)
-
+        # Lobby Events:
         #   get lobby list
         #       -> returns to sender a list of available lobbies
         if event_type == "get_lobby":
