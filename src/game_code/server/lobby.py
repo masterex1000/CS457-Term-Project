@@ -44,9 +44,6 @@ class GameLobby:
     def _end_game(self, event):
         pass
 
-    def _has_open_slot(self):
-        return self.current_players < self.max_players
-
     def _handle_chat_messages(self, event):
         pass
 
@@ -87,3 +84,10 @@ class GameLobby:
     def _log_event(self, event):
         pass
 
+    def has_open_slot(self):
+        return self.current_players < self.max_players
+
+    def run(self):
+        while True:
+            # event lobby loop logic goes here
+            break
