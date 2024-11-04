@@ -195,6 +195,7 @@ class EndGameRequest(Event, Message):
         )
 
 class ChatMessageRequest(Event, Message):
+    """ Can be sent by either client or server"""
     def __init__(self, user_id, user_token, lobby_id, lobby_token, message, checksum):
         self.user_id=user_id
         self.user_token=user_token
@@ -226,3 +227,10 @@ class ChatMessageResponse(Event, Message):
     @property
     def action(self):
         return "chat_message"
+
+    def to_dict(self):
+        return dict(
+            user_id=self.user_id,
+            checksum=self.checksum,
+            success=self.success
+        )
