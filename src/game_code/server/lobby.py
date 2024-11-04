@@ -39,7 +39,7 @@ class GameLobby:
     def _parse_event_type(self, event):
         return event.action
 
-    def _process_event(self, event):
+    def _on_event(self, event):
         """Takes an event and processes it's state, propagating any messages to connected clients if necessary"""
 
         event_type = self._parse_event_type(event)
