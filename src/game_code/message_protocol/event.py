@@ -2,13 +2,13 @@
 This class is an abstract base class that can be used to implement shared functionality
  for the various different message types used in the game
 """
-from abc import ABC, abstractmethod, abstractproperty
+from abc import ABC, abstractmethod
 
 
 class Event(ABC):
-
-    # event type
-    # on_event()
-    # get_type()
-
-    pass
+    """ The event class represents an interface specifying the event type and some on_event logic for subclasses """
+    @property
+    @abstractmethod
+    def action(self):
+        """ The action property specifies the type of event"""
+        return NotImplemented

@@ -3,7 +3,38 @@
 from typing import List
 from lobby import GameLobby
 
-lobbies : List[GameLobby] = []
+class LobbyManager:
 
-def get_lobby_list(has_open_slot = False) -> List[GameLobby]:
-    return [lobby for lobby in lobbies if (not has_open_slot or lobby.has_open_slot())]
+    lobbies: List[GameLobby] = []
+
+    def get_lobby_list(self, has_open_slot=False) -> List[GameLobby]:
+        """ Client requests a list of lobbies, then lobby manager responds with a list of available lobbies """
+        return [lobby for lobby in self.lobbies if (not has_open_slot or lobby.has_open_slot())]
+
+    def _get_ticket(self, lobby_idx):
+        """ Gets the ticket for a given lobby """
+        return -1
+
+    def join_lobby(self, event):
+        """ Lobby manager handles client request to join available lobby. Responds with a lobby_ticket """
+        try:
+            print()
+            client_id = parse_id(event)
+            self._get_ticket(client_id)
+        except:
+            lobby_ticket = -1
+
+        return lobby_ticket
+
+
+    def leave_lobby(self, event):
+
+        pass
+
+
+    def chat_message(self, event):
+        pass
+
+
+    def start_game(self, event):
+        pass

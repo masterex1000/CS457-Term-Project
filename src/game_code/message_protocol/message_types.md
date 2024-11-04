@@ -26,36 +26,36 @@ We'll need to define several message types for this assignment.
 
 ## General Message Format
 
-Every message is sent using the json packet system described in our example code.
+Every message type extends the abstract Event class sent using the json packet system described in our example code.
 We'll use the `action` field as the specifier for what the packet is doing, which will then
 route it internally. 
 
 Every one of the following actions are prefixed with their "category" name, 
-eg. the lobby packet "getLobbyList" will have the action name of `"action":"lobby.getLobbyList"`. 
+eg. the lobby packet "get_lobby_list" will have the action name of `"action":"lobby.get_lobby_list"`. 
 This makes it possible to quickly route packets to various functions/handlers 
 just by testing for the `lobby.` substring.
 
 # Lobby : `lobby.*`
- - getLobbyList (c->s)
- - lobbyList (s->c)
+ - get_lobby_list (c->s)
+ - lobby_list (s->c)
     - Lobby[] lobby_ids
- - joinLobby (c->s)
+ - join_lobby (c->s)
     - returns lobby_ticket
- - leaveLobby (c->s)
-    - lobbyTicket
- - chatMessage (c->s, s->c)
-    - lobbyTicket
+ - leave_lobby (c->s)
+    - lobby_ticket
+ - chat_message (c->s, s->c)
+    - lobby_ticket
     - String message
- - startGame (c->s)
-    - lobbyTicket
+ - start_game (c->s)
+    - lobby_ticket
 
 # Game `game.*`
- - gameStart (server -> client)
+ - game_start (server -> client)
  - game_id
- - submitBoard (c->s)
- - beginTurn (s->c) - Tells client their turn is beginning
- - makeGuess (c->s)  - Implicit End of turn
- - endTurn (c->s) - Telling the server the client is done with their move
- - updateBoard (s->c) - Updating client side board with new data
- - gameEnd (s->c)
+ - submit_board (c->s) - Used during setup of the game, e.g. ship placement
+ - begin_turn (s->c) - Tells client their turn is beginning
+ - make_guess (c->s)  - Implicit End of turn
+ - end_turn (c->s) - Telling the server the client is done with their move
+ - update_board (s->c) - Updating client side board with new data
+ - game_end (s->c)
     - who won?
