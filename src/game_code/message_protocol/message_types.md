@@ -4,13 +4,21 @@ We'll need to define several message types for this assignment.
 
 ## What messages do we need to pass?
     - Client <--- signal messages ---> Server
-    - Client --- guess ---> Server
+    - Client --- request available game lobbies ---> Server
+    - Client <-- list available game lobbies --- Server
+    - Client --- join lobby request ---> Server
+    - Client <--- join lobby response --- Server
+    - Client --- leave lobby request ---> Server
+    - Client <--- leave lobby response --- Server
+    - Client <--- lobby message ---> Server
+    - Client --- guess request ---> Server
     - Client <--- update board state ---> Server
 
 ## How are messages passed?
     - Messages are passed between Clients and the Server as data objects using sockets (TCP)
+    - Messages subclass the abstract class Event which defines an event type field and a data field plus an on_event method
     - Serialization will be as handled cleanly and efficiently as possible
-    -- Json based?
+    -- Json based
 
 ## How are messages handled?
     - These messages will go into an event queue and be processed by the respective server or client as events

@@ -8,9 +8,6 @@ from abc import ABC, abstractmethod, abstractproperty
 class Event(ABC):
 
     # event type
-
-
-
     # on_event()
     # get_type()
 
