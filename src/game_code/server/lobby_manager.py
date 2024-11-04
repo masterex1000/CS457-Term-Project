@@ -1,4 +1,4 @@
-# The lobby managment system, allows users to connect and disconnect from/to and search for lobbys
+# The lobby management system, allows users to connect and disconnect from/to and search for lobbies
 
 from typing import List
 from lobby import GameLobby

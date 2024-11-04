@@ -5,6 +5,7 @@ import json
 import io
 import struct
 from message import Message
+
 from server import lobby_manager
 from connection import Connection
 
@@ -16,10 +17,10 @@ class ServerConnection(Connection):
     def on_message(self, message):
         action = message.get("action")
 
-        messageModule, messageAction = action.split('.')
+        message_module, message_action = action.split('.')
 
-        if messageModule == "lobby":
-            self.handle_lobby_message(messageAction, message)
+        if message_module == "lobby":
+            self.handle_lobby_message(message_action, message)
         else:  # Old handling, keeping for debug reasons
             if action == "message":
                 msg = message.get("value")
@@ -29,21 +30,21 @@ class ServerConnection(Connection):
 
             self.send_message(content)
 
-    def handle_lobby_message(self, messageAction, message):
-        if messageAction == 'get_lobby_list':
-            lobbies = [{'name': lobby.lobbyName,
-                        "currentPlayers": lobby.currentPlayers,
-                        "maxPlayers": lobby.maxPlayers,
-                        "lobbyId": lobby.lobbyId}
+    def handle_lobby_message(self, message_action, message):
+        if message_action == 'get_lobby_list':
+            lobbies = [{'name': lobby.lobby_name,
+                        "currentPlayers": lobby.current_players,
+                        "maxPlayers": lobby.max_players,
+                        "lobbyId": lobby.lobby_id}
                        for lobby in lobby_manager.get_lobby_list()]
 
             self.send_message({"action": "lobby.lobbyList", "lobbies": lobbies})
             pass
-        if messageAction == 'joinLobby':
+        if message_action == 'joinLobby':
             pass
-        if messageAction == 'leaveLobby':
+        if message_action == 'leaveLobby':
             pass
-        if messageAction == 'chatMessage':
+        if message_action == 'chatMessage':
             pass
-        if messageAction == 'startGame':
+        if message_action == 'startGame':
             pass
