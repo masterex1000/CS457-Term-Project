@@ -20,7 +20,7 @@ class Ship:
     # state vars
     _type = ""
     _length = -1
-    _orientation = '$'
+    _orientation = '@'
     _bow_position = (-1,-1)
     _floating = False
     _hp = -1

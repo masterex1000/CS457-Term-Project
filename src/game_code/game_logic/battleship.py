@@ -33,7 +33,7 @@ class BattleShip:
 
 
     def get_updated_board_state(self):
-        """ Requests from the server the updated board state. Generally called at the beginning of the player's turn. """
+        """ Requests from the server the updated board state. Generally called at the beginning of the player.py's turn. """
         return NotImplemented
 
     def player_turn(self):

@@ -2,6 +2,10 @@
 # users to connect/disconnect, and routes messages between connections
 
 import uuid
+import src.game_code.message_protocol.message_types
+import src.game_code.message_protocol.event
+from src.game_code.game_logic.player import Player
+
 
 class GameLobby:
     def __init__(self, name: str, max_players: int):
@@ -13,6 +17,11 @@ class GameLobby:
 
     """ This section defines the """
     def _connect_user(self, event) -> bool:
+        user = event.to_dict()
+        user_id = user["user_id"]
+        username = user["username"]
+        user_token = user["user_token"]
+
         return False
 
     def _disconnect_user(self, event):
@@ -41,17 +50,26 @@ class GameLobby:
 
     def _on_event(self, event):
         """Takes an event and processes it's state, propagating any messages to connected clients if necessary"""
-
         event_type = self._parse_event_type(event)
 
         # Lobby Events:
-        #   get lobby list
-        #       -> returns to sender a list of available lobbies
+        # connect user to the lobby
+        #  -> updates the players array with the request information
+        if event_type == "connect_user":
+            self._connect_user(event)
+
+        # disconnects user from the lobby
+        #  -> updates players array and lobby state
+        if event_type == "disconnect_user":
+            self._disconnect_user(event)
+
+        # get lobby list
+        #  -> returns to sender a list of available lobbies
         if event_type == "get_lobby":
             self._get_lobby(event)
 
-        #   join lobby
-        #       -> join a lobby update lobby state, generate token
+        # join lobby
+        #  -> join a lobby update lobby state, generate token
         if event_type == "join_lobby":
             self._join_lobby(event)
 

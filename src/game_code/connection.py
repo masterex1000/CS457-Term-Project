@@ -175,4 +175,6 @@ class Connection:
     
     # Called for every received message from the peer.
     def on_message(self, message):
+        # Should this pass the message to the respective sub-system?
+        # e.g. lobby requests to the lobby subsystem, game requests to the game subsystem etc.
         pass

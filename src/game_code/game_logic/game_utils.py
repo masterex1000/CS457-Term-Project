@@ -8,11 +8,11 @@ HIT_CHARACTER = "X"
 MISS_CHARACTER = "~"
 
 def build_board(background_char):
-    """ initialize background of the game, usually for either opponent or player """
+    """ initialize background of the game, usually for either opponent or player.py """
     return [[background_char for x in range(BOARD_DIMENSIONS)] for y in range(BOARD_DIMENSIONS)]
 
 def init_board(player=True):
-    """ Initialize the game board to default setup, player board if arg is True else Opponent """
+    """ Initialize the game board to default setup, player.py board if arg is True else Opponent """
     if player:
         board = build_board(PLAYER_BOARD_BACKGROUND)
     else:

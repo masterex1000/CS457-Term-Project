@@ -19,11 +19,11 @@ class Game:
         self._PLAYER2 = p2
 
     def start(self, player):
-        """ Starts the game with the specified player going first"""
+        """ Starts the game with the specified player.py going first"""
         print("")
 
     def start_game(self):
-        """ Starts game after a coin toss to determine the starting player. """
+        """ Starts game after a coin toss to determine the starting player.py. """
         coin_toss = os.urandom(self._GAME_ID) % 2
         if coin_toss % 2 == 0:
             print("Player 1 wins the coin toss.")
