@@ -11,16 +11,16 @@ class LobbyManager:
         """ Client requests a list of lobbies, then lobby manager responds with a list of available lobbies """
         return [lobby for lobby in self.lobbies if (not has_open_slot or lobby.has_open_slot())]
 
-    def _get_ticket(self, lobby_idx):
-        """ Gets the ticket for a given lobby """
-        return -1
-
     def join_lobby(self, event):
         """ Lobby manager handles client request to join available lobby. Responds with a lobby_ticket """
         try:
-            print()
-            client_id = parse_id(event)
-            self._get_ticket(client_id)
+            unpacked_event = event.to_dict()
+            join_lobby_id = unpacked_event["lobby_id"]
+            user_id = unpacked_event["user_id"]
+            user_token = unpacked_event["user_token"]
+
+
+
         except:
             lobby_ticket = -1
 
@@ -37,4 +37,7 @@ class LobbyManager:
 
 
     def start_game(self, event):
+        pass
+
+    def _log_event(self, event):
         pass
