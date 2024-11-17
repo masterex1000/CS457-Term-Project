@@ -21,6 +21,8 @@ class ServerConnection(Connection):
 
         if message_module == "lobby":
             self.handle_lobby_message(message_action, message)
+        if message_module == "game":
+            self.handle_game_message(message_action, message)
         else:  # Old handling, keeping for debug reasons
             if action == "message":
                 msg = message.get("value")
@@ -86,3 +88,13 @@ class ServerConnection(Connection):
         if message_action == 'startGame':
             # TODO: implement
             pass
+
+    def handle_game_message(self, message_action: str, message):
+        # We'll forward every game message to whatever lobby it is from
+        
+        lobby = lobby_manager.getLobbyFromId(message.get("lobby_id", None))
+        
+        if lobby == None:
+            return # Ignore this message... Client doesn't know what it is doing
+
+        lobby.onGameMessage(self, message_action, message)

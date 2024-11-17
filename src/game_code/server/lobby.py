@@ -21,17 +21,21 @@ class GameLobby:
 
     """Using hardcoded event functions for simplicity rn"""
 
-    def connect_user(self, conn: Connection):
+    def connect_user(self, conn: Connection) -> bool:
         if self.has_player(conn):
             # already connected, just ignore
-            return
+            return False
+        
+        if not self.has_open_slot():
+            return False
 
         self.players.append((conn, None))
+        self.current_players = self.current_players + 1
         
         self.log_message(f"Connected user ({conn.addr}) to lobby")
         
-        pass
-    
+        return True
+        
     def disconnect_user(self, conn: Connection):
         
         if not self.has_player(conn):
@@ -57,10 +61,12 @@ class GameLobby:
     def log_message(self, msg: str):
         print(f"[Lobby:{self.lobby_id}] {msg}")
 
-
-    def onGameMessage(self, message):
+    def onGameMessage(self, conn: Connection, message_action: str, message):
+        """Processes any `game.*` message passed from the client to the server"""
+        
+        
+        
         pass
-    
     
     # """ This section defines the lobby messages """
     # def _connect_user(self, event) -> bool:
