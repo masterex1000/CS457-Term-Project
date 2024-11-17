@@ -86,7 +86,12 @@ class ServerConnection(Connection):
             lobby.handleChatMessage(self, message.get("message", ""))
 
         if message_action == 'startGame':
-            # TODO: implement
+            lobby = lobby_manager.getLobbyFromId(message.get("id", None))
+            
+            if lobby == None:
+                return
+            
+            lobby.handleStartGame(self, message)
             pass
 
     def handle_game_message(self, message_action: str, message):

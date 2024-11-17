@@ -6,7 +6,7 @@ import uuid
 import secrets
 
 from game_logic.player import Player
-
+from game_logic.game import Game
 from connection import Connection
 from typing import Tuple
 
@@ -18,6 +18,7 @@ class GameLobby:
         self.max_players = max_players
         self.current_players = 0
         self.players: List[Tuple[Connection, Player]] = [] # List of user connections to route messages to
+        self.game: Game = None
 
     """Using hardcoded event functions for simplicity rn"""
 
@@ -37,9 +38,8 @@ class GameLobby:
         return True
         
     def disconnect_user(self, conn: Connection):
-        
         if not self.has_player(conn):
-            return # We don't have this player... just ignore ig
+            return # We don't have this player... just ignore it
         
         for idx, p in enumerate(self.players):
             if(p[0] == conn):
@@ -54,6 +54,15 @@ class GameLobby:
         
         for conn, player in self.players:
             conn.send_message({"action": "lobby.chatMessage", "message": msg})
+
+    def handleStartGame(self, conn: Connection, message):
+        if not self.has_player(conn):
+            return # Not a part of the lobby
+        
+        if len(self.players) != 2:
+            conn.respond_to_message(message, {"action": "error", "message": "Must have two players to begin game"})
+
+
     
     def has_player(self, conn: Connection) -> bool:
         return any(player[0] == conn for player in self.players)
@@ -62,9 +71,12 @@ class GameLobby:
         print(f"[Lobby:{self.lobby_id}] {msg}")
 
     def onGameMessage(self, conn: Connection, message_action: str, message):
-        """Processes any `game.*` message passed from the client to the server"""
+        """Handles any `game.*` message passed from the client to the server"""
         
+        if not self.has_player(conn):
+            return # Not a part of our lobby. Ignore
         
+        self.log_message(f"Received game event: {message_action}")
         
         pass
     

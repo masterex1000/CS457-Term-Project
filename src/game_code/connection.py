@@ -13,14 +13,14 @@ class Connection:
         self._send_buffer = b""
         self._jsonheader_len = None
         self.jsonheader = None
-        
+
         self.response = None
         self._request_queued = False
         self.request = None
-        
+
         self.send_queue = []
         self.recv_queue = []
-    
+
     def _set_selector_events_mask(self, mode):
         """Set selector to listen for events: mode is 'r', 'w', or 'rw'."""
         if mode == "r":
@@ -32,7 +32,7 @@ class Connection:
         else:
             raise ValueError(f"Invalid events mask mode {repr(mode)}.")
         self.selector.modify(self.sock, events, data=self)
-    
+
     # Reads the latest data into the local buffer
     def _read(self):
         try:
@@ -46,7 +46,7 @@ class Connection:
                 self._recv_buffer += data
             else:
                 raise RuntimeError("Peer closed.")
-    
+
     # Sends as much data as our send buffer can currently handle
     def _write(self):
         if self._send_buffer:
@@ -59,20 +59,20 @@ class Connection:
                 pass
             else:
                 self._send_buffer = self._send_buffer[sent:]
-        
+
         # Our buffer is empty, we no longer care abour write events
         if len(self._send_buffer) == 0:
             self._set_selector_events_mask("r")
-                
+
     def process_events(self, mask):
         if mask & selectors.EVENT_READ:
             self.read()
         if mask & selectors.EVENT_WRITE:
             self.write()
-            
+
     def write(self):
         self._write()
-    
+
     # Called whenever we need to read data
     def read(self):
         self._read()
@@ -87,7 +87,7 @@ class Connection:
         if self.jsonheader:
             if self.response is None:
                 self.process_message()
-    
+
     def close(self):
         print("closing connection to", self.addr)
         try:
@@ -108,7 +108,7 @@ class Connection:
         finally:
             # Delete reference to socket object for garbage collection
             self.sock = None
-    
+
     def process_protoheader(self):
         hdrlen = 2
         if len(self._recv_buffer) >= hdrlen:
@@ -116,7 +116,7 @@ class Connection:
                 ">H", self._recv_buffer[:hdrlen]
             )[0]
             self._recv_buffer = self._recv_buffer[hdrlen:]
-    
+
     def process_jsonheader(self):
         hdrlen = self._jsonheader_len
         if len(self._recv_buffer) >= hdrlen:
@@ -132,16 +132,16 @@ class Connection:
             ):
                 if reqhdr not in self.jsonheader:
                     raise ValueError(f'Missing required header "{reqhdr}".')
-    
+
     def process_message(self):
         content_len = self.jsonheader["content-length"]
-        
+
         if not len(self._recv_buffer) >= content_len:
             return
-        
+
         data = self._recv_buffer[:content_len]
         self._recv_buffer = self._recv_buffer[content_len:]
-        
+
         if self.jsonheader["content-type"] == "text/json":
             encoding = self.jsonheader["content-encoding"]
             response = Message.json_decode(data, encoding)
@@ -154,9 +154,10 @@ class Connection:
                 f'received {self.jsonheader["content-type"]} response from',
                 self.addr,
             )
-            
-            print(f"got response: {repr(data)}. Binary format currently unsupported. Ignoring")
-    
+
+            print(
+                f"got response: {repr(data)}. Binary format currently unsupported. Ignoring")
+
     # Sends the given message to the peer
     def send_message(self, content):
         content_encoding = "utf-8"
@@ -165,14 +166,26 @@ class Connection:
             "content_type": "text/json",
             "content_encoding": content_encoding,
         }
-        
+
         message = Message.create_message(**response)
-        
+
         if len(message) > 0 and len(self._send_buffer) == 0:
-            self._set_selector_events_mask("rw") # We care about write events now
-        
+            # We care about write events now
+            self._set_selector_events_mask("rw")
+
         self._send_buffer += message
-    
+
+    def respond_to_message(self, message, content):
+        """Wrapper around `send_message` that automatically includes the `transaction`
+        field if it is included in the original message."""
+        
+        t = {}
+        
+        if message.get("transaction", None) != None:
+            t = {"transaction", message.get("transaction")}
+        
+        self.send_message({**content, **t})
+
     # Called for every received message from the peer.
     def on_message(self, message):
         # Should this pass the message to the respective sub-system?

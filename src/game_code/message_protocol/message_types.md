@@ -50,6 +50,10 @@ just by testing for the `lobby.` substring.
     - lobby_ticket
 
 # Game `game.*`
+
+NOTE: every game message *must* have an associated lobby_id param included. This is how
+the server knows where to route the message
+
  - game_start (server -> client)
  - game_id
  - submit_board (c->s) - Used during setup of the game, e.g. ship placement
