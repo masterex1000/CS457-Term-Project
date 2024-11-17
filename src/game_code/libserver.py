@@ -8,7 +8,7 @@ from message import Message
 
 from server import lobby_manager
 from connection import Connection
-
+from server.lobby import GameLobby
 
 class ServerConnection(Connection):
     def __init__(self, selector, sock, addr):
@@ -31,6 +31,8 @@ class ServerConnection(Connection):
             self.send_message(content)
 
     def handle_lobby_message(self, message_action, message):
+        # Handling/Routing lobby messages here since we don't know exactly where they'll go yet
+        
         if message_action == 'get_lobby_list':
             lobbies = [{'name': lobby.lobby_name,
                         "currentPlayers": lobby.current_players,
@@ -40,11 +42,47 @@ class ServerConnection(Connection):
 
             self.send_message({"action": "lobby.lobbyList", "lobbies": lobbies})
             pass
+        if message_action == 'createLobby':
+            maxPlayers = message.get("maxPlayers")
+            
+            if maxPlayers < 2:
+                self.respond_to_message(message, {"action": "error", "message": "Need at least 2 players in a lobby"})
+                return
+            
+            # Just so we don't have to handle more than 2 players rn
+            if maxPlayers > 2:
+                self.respond_to_message(message, {"action": "error", "message": "Can't have more than 2 players in a lobby"})
+            
+            lobby: GameLobby = lobby_manager.createLobby(message.get("name"), message.get("maxPlayers"))
+            if lobby.connect_user(self):
+                self.respond_to_message(message, {"action": "lobby.joinLobby", "id": lobby.lobbyId})
+            else:
+                self.respond_to_message(message, {"action": "lobby.leaveLobby", "id": lobby.lobbyId})
+            pass
+        
         if message_action == 'joinLobby':
+            lobby = lobby_manager.getLobbyFromId(message.get("id", None))
+            
+            if lobby != None:
+                lobby.connect_user(self)
             pass
+        
         if message_action == 'leaveLobby':
-            pass
+            lobby = lobby_manager.getLobbyFromId(message.get("id", None))
+            
+            if lobby != None:
+                lobby.disconnect_user(self)
+            
+            self.respond_to_message(message, {"action": "lobby.leaveLobby", "id": message.get("id", None)})
+            
         if message_action == 'chatMessage':
-            pass
+            lobby = lobby_manager.getLobbyFromId(message.get("id", None))
+            
+            if lobby == None:
+                return
+            
+            lobby.handleChatMessage(self, message.get("message", ""))
+
         if message_action == 'startGame':
+            # TODO: implement
             pass
