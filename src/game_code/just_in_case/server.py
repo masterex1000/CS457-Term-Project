@@ -1,4 +1,4 @@
-
+import sys
 import selectors
 import socket
 import json
@@ -205,5 +205,9 @@ def start_logging(name):
     return logger
 
 if __name__ == "__main__":
-    server = Server()
+    
+    if len(sys.argv) <= 2:
+        server = Server()
+    else:
+        server = Server(sys.argv[1], int(sys.argv[2]))
     server.run()
