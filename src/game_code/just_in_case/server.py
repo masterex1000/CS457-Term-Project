@@ -42,7 +42,7 @@ class Server:
                     question = split_result[0]
                     answer = eval(split_result[1].strip())
                     entry = {"question": question, "answer": answer}
-                    print(entry)
+                    self.logger.info(f"Loading... {entry}")
                     questions.append(entry)
                 self.logger.info(f"Loaded {len(questions)} questions from questions.txt")
                 return questions
