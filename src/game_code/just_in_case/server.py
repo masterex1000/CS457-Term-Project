@@ -33,20 +33,6 @@ class Server:
         self.logger.info(f"Server started on {host}:{port}")
         print(f"Server started on {host}:{port}")
     
-    def start_logging(self):
-        self.logger = logging.getLogger('GameServer')
-        self.logger.setLevel(logging.INFO)
-        
-        fh = logging.FileHandler('server.log')
-        fh.setLevel(logging.INFO)
-        
-        formatter = logging.Formatter(
-            '%(asctime)s - %(levelname)s - %(message)s',
-            datefmt='%Y-%m-%d %H:%M:%S'
-        )
-        fh.setFormatter(formatter)
-        self.logger.addHandler(fh)
-    
     def load_questions(self) -> List[Dict]:
         try:
             with open('questions.txt', 'r') as f:
