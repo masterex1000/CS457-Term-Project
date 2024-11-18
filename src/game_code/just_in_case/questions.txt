@@ -1,0 +1,25 @@
+UDP provides 'reliable' data transmission. | False
+TCP is a connection-oriented protocol. | True
+DNS is short for the Domain Name System. | True
+DNS translates domain names into IP addresses. | True 
+HTTP and FTP are both application layer protocols. | True 
+A subnet mask is used to determine which parts of an IP address specify network and host. | True 
+In computer networking data encapsulation is the process of adding headers and trailers to packets. | True 
+A router is used to forward packets between different networks. | True 
+MAC addresses are used to route packets at the network layer. | False 
+IPv6 addresses are 128 bits long and IPv4 addresses are 32 bits long. | True 
+IP is a connectionless protocol. | True 
+172.31.0.24/24 is a public IP address. | False 
+IPv4 addresses in 169.254.0.0/16 are APIPA addresses (later standardized to link-local). | True 
+127.0.0.0/8 is reserved for loopback. | True 
+The first address in a subnet is used to define the network itself. | True 
+The last address in a subnet is the broadcast address. | True 
+Time Division Multiplexing divides the transmission spectrum into frequency bands. | False 
+Frequency Division Multiplexing divides the transmission spectrum into frequency bands. | True 
+IPv6 hosts can configure themselves automatically using SLAAC (stateless address autoconf). | True 
+IPv6 can handle packets of a larger size than IPv4 these packets are called jumbograms. | True 
+MAC Addresses reveal information about the device manufacturer. | True 
+NIC is short for network interface card. | True 
+TLS uses AES encryption which is asymmetric. | False 
+The Diffie-Hellman Key Exchange enables the creation of a shared secret over an unsafe medium. | True
+ARP (Address Resolution Protocol) maps MAC addresses to IP addresses via broadcast transmission. | True
