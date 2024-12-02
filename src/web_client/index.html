@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Untitled</title>
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&amp;display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="./style.css">
+
+</head>
+
+<body>
+
+	<div id="pop-over">
+		<div class="mini-title">🎉<span id="winner-name">Jimmy</span> Wins!🎉</div>
+		<div>They were the first one to reach <span id="winner-points">10</span> points</div>
+		<div>All scores have been reset... Good Luck!</div>
+	</div>
+
+	<div id="nameprompt">
+		<p class="title">Quiz Game</p>
+		<p>Please Enter Your Username</p>
+		<br>
+		<div>
+			<input id="username" placeholder="Username">
+			<div id="username_submit" onclick="submit_username()">&gt;</div>
+		</div>
+		<div id="usrnm_error">Error: Invalid Username</div>
+	</div>
+
+	<div id="connect">
+		<div class="mini-title">Connecting to server...</div>
+		<br>
+		<span class="loader"></span>
+	</div>
+
+	<div id="quiz">
+		<div class="scoretext">Score: <span id="quiz-score">123</span></div>
+		<div class="question">
+			<div id="question-text">What is the answer to the question? Because Honestly if you don't now we are kinda screwed.</div>
+			<div>
+				<input id="answer" onkeydown="answerKeyDown(event)" placeholder="Answer (t/f)">
+				<div id="username_submit" onclick="submitAnswer()">&gt;</div>
+			</div>
+			<div id="answer-error">Must be True or False</div>
+		</div>
+
+		<div id="score-list">
+			<table>
+				<tr>
+					<td>1.</td>
+					<td>Collin</td>
+					<td>1234</td>
+				</tr>
+				<tr>
+					<td>2.</td>
+					<td>Collin</td>
+					<td>1234</td>
+				</tr>
+				<tr>
+					<td>3.</td>
+					<td>Collin</td>
+					<td>1234</td>
+				</tr>
+				<tr>
+					<td>4.</td>
+					<td>Collin</td>
+					<td>1223423434</td>
+				</tr>
+
+			</table>
+		</div>
+	</div>
+
+	<div id="error">
+		<div class="mini-title">Oh No! Something went wrong!</div>
+		<div id="err_page_err"></div>
+		<div>Reload the page to try to reconnect and play again</div>
+	</div>
+
+	<div class="footer-text">CS457 Fall 24 Term Project. <a href="https://github.com/masterex1000/CS457-Term-Project">Source</a></div>
+
+	<script src="./script.js"></script>
+</body>
+
+</html>

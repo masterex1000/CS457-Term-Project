@@ -82,13 +82,33 @@ class Server:
             if client_data.username:
                 client_data.outb += (score_message + "\n").encode()
 
-    def send_question(self, data):
+    def declare_winner(self, username):
+        """ Sends all clients a message letting them know who won and resets scores """
+        win_message = json.dumps({"type": "winner", "data": {"username": username, "score": self.scores[username]}})
+
+        # queue message for all clients
+        for client_data in self.clients.values():
+            if client_data.username:
+                client_data.outb += (win_message + "\n").encode()
+
+        # Reset scores
+        self.scores = { x:0 for x in self.scores }
+
+    def send_question(self, data, wasPrev = False, prevCorrect=False, currentScore=None):
         question = self.questions[self.current_question % len(self.questions)]
-        question_message = json.dumps({
+        
+        question_message = {
             "type": "question",
             "data": {"question": question["question"], "id": self.current_question}
-        })
-        data.outb += (question_message + "\n").encode()
+        }
+        
+        if wasPrev:
+            question_message["data"]["prevCorrect"] = prevCorrect
+            
+        if currentScore is not None:
+            question_message["data"]["currentScore"] = currentScore
+        
+        data.outb += (json.dumps(question_message) + "\n").encode()
 
     def process_message(self, sock: socket.socket, data: types.SimpleNamespace, message: dict):
         if message["type"] == "username":
@@ -102,7 +122,7 @@ class Server:
                 self.broadcast_scores()
 
                 # send current question
-                self.send_question(data)
+                self.send_question(data, currentScore=self.scores[data.username])
 
 
         elif message["type"] == "answer" and data.username:
@@ -119,45 +139,93 @@ class Server:
             
             if answer_correct:
                 self.scores[data.username] += 1
+                
+                # Check if we have a winner
+                if self.scores[data.username] >= 10:
+                    self.declare_winner(data.username)
+                
                 self.broadcast_scores()
             
             # send next question
             self.current_question += 1
-            self.send_question(data)
+            self.send_question(data, wasPrev=True, prevCorrect=answer_correct, currentScore=self.scores[data.username])
 
+    
+    # def service_connection(self, key: selectors.SelectorKey, mask: int):
+    #     sock = key.fileobj
+    #     data = key.data
+        
+    #     if mask & selectors.EVENT_READ:
+    #         try:
+    #             recv_data = sock.recv(1024)
+    #             if recv_data:
+    #                 data.inb += recv_data
+                    
+    #                 # Process complete messages
+    #                 while b'\n' in data.inb:
+    #                     message, data.inb = data.inb.split(b'\n', 1)
+    #                     try:
+    #                         decoded_message = json.loads(message.decode())
+    #                         self.process_message(sock, data, decoded_message)
+    #                     except json.JSONDecodeError:
+    #                         self.logger.error(f"Invalid JSON received from {data.addr}")
+    #             else:
+    #                 # Connection closed by client
+    #                 self.handle_disconnect(sock)
+                    
+    #         except ConnectionError:
+    #             self.handle_disconnect(sock)
+        
+    #     if mask & selectors.EVENT_WRITE:
+    #         if data.outb:
+    #             try:
+    #                 sent = sock.send(data.outb)
+    #                 data.outb = data.outb[sent:]
+    #             except ConnectionError:
+    #                 self.handle_disconnect(sock)
     
     def service_connection(self, key: selectors.SelectorKey, mask: int):
         sock = key.fileobj
         data = key.data
-        
-        if mask & selectors.EVENT_READ:
-            try:
-                recv_data = sock.recv(1024)
-                if recv_data:
-                    data.inb += recv_data
-                    
-                    # Process complete messages
-                    while b'\n' in data.inb:
-                        message, data.inb = data.inb.split(b'\n', 1)
-                        try:
-                            decoded_message = json.loads(message.decode())
-                            self.process_message(sock, data, decoded_message)
-                        except json.JSONDecodeError:
-                            self.logger.error(f"Invalid JSON received from {data.addr}")
-                else:
-                    # Connection closed by client
-                    self.handle_disconnect(sock)
-                    
-            except ConnectionError:
-                self.handle_disconnect(sock)
-        
-        if mask & selectors.EVENT_WRITE:
-            if data.outb:
+
+        try:
+            if mask & selectors.EVENT_READ:
                 try:
-                    sent = sock.send(data.outb)
-                    data.outb = data.outb[sent:]
+                    recv_data = sock.recv(1024)
+                    if recv_data:
+                        data.inb += recv_data
+
+                        # Process complete messages
+                        while b'\n' in data.inb:
+                            message, data.inb = data.inb.split(b'\n', 1)
+                            try:
+                                decoded_message = json.loads(message.decode())
+                                self.process_message(sock, data, decoded_message)
+                            except json.JSONDecodeError:
+                                self.logger.error(f"Invalid JSON received from {data.addr}")
+                    else:
+                        # Connection closed by client
+                        self.handle_disconnect(sock)
+
                 except ConnectionError:
                     self.handle_disconnect(sock)
+
+            if mask & selectors.EVENT_WRITE:
+                if data.outb:
+                    try:
+                        sent = sock.send(data.outb)
+                        data.outb = data.outb[sent:]
+                    except (ConnectionError, OSError):
+                        self.logger.error(f"Error sending data to {data.addr}")
+                        self.handle_disconnect(sock)
+
+        except (KeyError, ValueError):
+            # KeyError occurs if the socket is unregistered during the process
+            # self.logger.warning(f"Tried to process a closed connection for {sock.getpeername()}")
+            pass
+        except OSError as e:
+            self.logger.error(f"OSError: {e}")
+            self.handle_disconnect(sock)
     
     def handle_disconnect(self, sock: socket.socket):
         data = self.clients[sock]
@@ -200,6 +268,14 @@ def start_logging(name):
     )
 
     log_file_handler.setFormatter(ymd_hms_formatter)
+    
+    
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.INFO)
+    console_formatter = logging.Formatter('%(levelname)s: %(message)s')
+    console_handler.setFormatter(console_formatter)
+    
+    logger.addHandler(console_handler)
     logger.addHandler(log_file_handler)
 
     return logger
