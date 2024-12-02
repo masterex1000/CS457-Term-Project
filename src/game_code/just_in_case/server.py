@@ -9,7 +9,7 @@ from typing import Dict, List
 
 class Server:
     """ game server class used in the T/F game """
-    def __init__(self, host: str = 'localhost', port: int = 42069):
+    def __init__(self, host: str = 'localhost', port: int = 57054):
         # setup logging
         self.logger = start_logging('Server')
 

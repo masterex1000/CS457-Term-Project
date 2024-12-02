@@ -8,7 +8,7 @@ from typing import Dict
 
 class Client:
 
-    def __init__(self, host= 'localhost', port= 42069):
+    def __init__(self, host= 'localhost', port=57054):
         self.sel = selectors.DefaultSelector()
         self.running = True
         
