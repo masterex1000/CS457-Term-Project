@@ -56,3 +56,10 @@ Make sure the server is running at the `127.0.0.1:57054` address
 **Additional resources:**
 * https://www.python.org/doc/
 * https://realpython.com/python-sockets/
+
+
+## Screenshots
+
+![alt](assets/main_page.png)
+![alt](assets/question.png)
+![alt](assets/winner.png)
