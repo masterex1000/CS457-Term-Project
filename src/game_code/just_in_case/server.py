@@ -5,11 +5,12 @@ import json
 import logging
 import re
 import types
+import argparse
 from typing import Dict, List
 
 class Server:
     """ game server class used in the T/F game """
-    def __init__(self, host: str = 'localhost', port: int = 57054):
+    def __init__(self, host: str = '0.0.0.0', port: int = 57054):
         # setup logging
         self.logger = start_logging('Server')
 
@@ -282,8 +283,18 @@ def start_logging(name):
 
 if __name__ == "__main__":
     
-    if len(sys.argv) <= 2:
-        server = Server()
-    else:
-        server = Server(sys.argv[1], int(sys.argv[2]))
+    parser = argparse.ArgumentParser(description="TCP Server Application For Quiz Game")
+
+    parser.add_argument(
+        '-p', '--port',
+        type=int, # Specify the expected type of the argument
+        required=False, # Make the argument mandatory
+        help="Specify the port number to use",
+        default=57054
+    )
+    
+    args = parser.parse_args()
+    
+    server = Server(port=args.port)
     server.run()
+    

@@ -1,4 +1,5 @@
-const ws_url = "ws://localhost:8080";
+// const ws_url = "ws://localhost:8080";
+const ws_url = "ws://" + location.host;
 
 const all_views = ["nameprompt", "connect", "quiz", "error"];
 

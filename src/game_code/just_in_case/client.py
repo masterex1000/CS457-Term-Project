@@ -1,4 +1,5 @@
 
+import argparse
 import socket
 import json
 import selectors
@@ -134,9 +135,25 @@ class Client:
 
 if __name__ == "__main__":
 
-    if len(sys.argv) <= 2:
-        client = Client()
-    else:
-        client = Client(sys.argv[1], int(sys.argv[2]))
+    parser = argparse.ArgumentParser(description="Client Application For Quiz Game")
 
+    parser.add_argument(
+        '-p', '--port',
+        type=int, # Specify the expected type of the argument
+        required=False, # Make the argument mandatory
+        help="Specify the port number of the server to connect to",
+        default=57054
+    )
+    
+    parser.add_argument(
+        '-i', '--address',
+        type=str, # Specify the expected type of the argument
+        required=False, # Make the argument mandatory
+        help="Specify the address of the server to connect to",
+        default="localhost"
+    )
+    
+    args = parser.parse_args()
+    
+    client = Client(host=args.address, port=args.port)
     client.run()
