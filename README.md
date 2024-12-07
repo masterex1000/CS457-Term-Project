@@ -41,8 +41,10 @@ hosting the client files.
 
 To run the web client you'll first need to install `websockify`. 
 
+NOTE: if installing on CS machines you may need to update pip if you run into an error.
+
 1. *recommended* Install using the `requirements.txt` file, then run using
-   `python3 -m websockify`
+   `python3 -m websockify`.
 - If you're using Debian (or any other OS setup to use an externally managed python environment) and you want to install `websockify` globally you can install it with `sudo apt install python3-websockify`
 - If you're using another setup you should be able to run `pip3 install websockify`.
 - If that doesn't work look at [their repository](https://github.com/novnc/websockify) for other installation options.
@@ -87,6 +89,22 @@ python3 client.py -i localhost -p 57054
 * https://www.python.org/doc/
 * https://realpython.com/python-sockets/
 
+# Security/Risk Evaluation
+
+One of the primary security risks in the application currently is that the
+server/client's don't fully verify and validate messages. If a message declares
+itself as a specific type the server will happily accept it. We also don't have
+any limits on the length of each message, meaning that a malicious client could
+theoretically fill up the ram of the server by sending a multi-gigabyte long
+message. There are also no anti-cheat measures in place to prevent a bot from
+spamming answers or by filling up the game with fake accounts. Although there
+are no inherent limits with the number of clients our game can support, the
+operating system and machine it's running on do have ram and network resource
+limits that could be easily hit by a knowledgeable attacker.
+
+Many of these could be fixed by doing a heavy pass to properly limit and
+validate all data, which would allow us to close bad connections, limit message
+size, etc.
 
 ## Extra Screenshots
 
