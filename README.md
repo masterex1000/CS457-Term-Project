@@ -14,7 +14,7 @@ players to compete with each other by answering quiz questions.
 
 ## **How to play:**
 
-1. **Start The Server:** From the `src/just_in_case` directory run the `server.py` script
+1. **Start The Server:** From the `src/game_code` directory run the `server.py` script
 
 ```
 python3 server.py -p 57054
@@ -25,7 +25,7 @@ python3 server.py -p 57054
  - [Web Client Instructions](#web-client-highly-recommended)
  - [Terminal Client Instructions](#terminal-client)
 
-3. **Play the game:** Simply enter a username and start answering t/f questions. First to 10 points wins!
+3. **Play the game:** Enter a username and start answering t/f questions. First to 10 points wins!
 
 
 ## Web Client **HIGHLY RECOMMENDED**
@@ -58,7 +58,7 @@ Make sure the server is running at the `127.0.0.1:57054` address
 
 ## Terminal Client
 
-From the `src/just_in_case` directory run the `client.py` script on two different machines or terminals.
+From the `src/game_code` directory run the `client.py` script on two different machines or terminals.
 
 NOTE: This client was used earlier in development, so the web-client is considered the "proper" way to use the application
 
