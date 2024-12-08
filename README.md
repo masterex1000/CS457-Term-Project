@@ -112,24 +112,24 @@ size, etc.
 ![alt](assets/question.png)
 ![alt](assets/winner.png)
 
-## Retrospective - Game Development Pivot
+# Retrospective - Game Development Pivot
 
-### Project Overview
+## Project Overview
 
 Our team initially set out to develop a battleship game, but successfully pivoted 
 to creating a Q&A game. This retrospective examines the journey, challenges faced,
 and key learnings from this experience.
 
-### Timeline and Pivot
+## Timeline and Pivot
 
 The project spanned the length of the semester with:
 - Majority of the semester focused on battleship game development
 - Strategic pivot to Q&A game once it became clear that the deadlines were at risk
 - Successfully met project deadline with revised scope
 
-### Challenges Encountered
+## Challenges Encountered
 
-#### Initial Phase - Battleship Game
+### Initial Phase - Battleship Game
 
 ##### Increasing code complexity
 
@@ -143,7 +143,7 @@ The project spanned the length of the semester with:
 - Fixed deadline pressure
 - Limited bandwidth for handling expanding scope
 
-#### Adaptation and Solution
+## Adaptation and Solution
 
 Heeding the professor's suggestion, we shifted the project to a Q&A game format.
 This proved to be a crucial turning point as this decision:
@@ -152,7 +152,7 @@ This proved to be a crucial turning point as this decision:
 - Maintained alignment with assignment requirements
 - Allowed for better resource management
 
-#### Key Successes
+## Key Successes
 
 ##### Effective Problem Recognition
 
@@ -165,7 +165,7 @@ This proved to be a crucial turning point as this decision:
 - Maintained team cohesion during transition
 - Met original deadline despite inital setbacks
   
-#### Lessons Learned
+## Lessons Learned
 
 ##### Workload Estimation
 
@@ -184,7 +184,7 @@ This proved to be a crucial turning point as this decision:
 - Importance of flexibility in approach
 - Strength in collaborative problem-solving
 
-#### Reccomendations for Future Projects
+## Reccomendations for Future Projects
 ##### Implementation Phase
 
 - Start with minimal viable product (MVP)
@@ -203,7 +203,7 @@ This proved to be a crucial turning point as this decision:
 - Clear communication channels for raising concerns
 - Defined process for scope change decisions
 
-#### Conclusion
+## Conclusion
 
 While the project didn't result in the initially planned battleship game, 
 the team demonstrated remarkable adaptability and pragmatism in pivoting to 
