@@ -111,3 +111,104 @@ size, etc.
 ![alt](assets/main_page.png)
 ![alt](assets/question.png)
 ![alt](assets/winner.png)
+
+## Retrospective - Game Development Pivot
+
+### Project Overview
+
+Our team initially set out to develop a battleship game, but successfully pivoted 
+to creating a Q&A game. This retrospective examines the journey, challenges faced,
+and key learnings from this experience.
+
+### Timeline and Pivot
+
+The project spanned the length of the semester with:
+- Majority of the semester focused on battleship game development
+- Strategic pivot to Q&A game once it became clear that the deadlines were at risk
+- Successfully met project deadline with revised scope
+
+### Challenges Encountered
+
+#### Initial Phase - Battleship Game
+
+1. Increasing code complexity
+   - Additional Features led to mounting technical complexity
+   - Integration challenges with new functionality
+   - Growing Technical Debt
+2. Resource Constraints
+   - Competing priorities from other concurrent classes and projects
+   - Fixed deadline pressure
+   - Limited bandwidth for handling expanding scope
+
+#### Adaptation and Solution
+
+Heeding the professor's suggestion, we shifted the project to a Q&A game format.
+This proved to be a crucial turning point as this decision:
+- Significantly reduced development complexity
+- Accelerated our development timeline
+- Maintained alignment with assignment requirements
+- Allowed for better resource management
+
+#### Key Successes
+
+##### Effective Problem Recognition
+
+- Early identification of scope creep issues
+- Proactive response to mounting challenges
+  
+##### Adaptive project management
+
+- Successful pivot to a more manageable scope
+- Maintained team cohesion during transition
+- Met original deadline despite inital setbacks
+  
+#### Lessons Learned
+
+##### Workload Estimation
+
+- Importance of realistic initial scope assessment
+- Need for buffer time in project timelines
+- Better understanding of team and individual capacity alongside other commitments
+
+##### Expectation Management
+
+- Setting clear boundaries for feature additions
+- Importance of maintaining focus on core requirements
+- Regular alignment checks with project objective
+  
+##### Team Dynmaics
+- Value of open communication during challenges
+- Importance of flexibility in approach
+- Strength in collaborative problem-solving
+
+#### Reccomendations for Future Projects
+##### Implementation Phase
+
+- Start with minimal viable product (MVP)
+- Establish clear scope boundaries early
+- Regular complexity assessment checks
+  
+##### Project Planning
+
+- More detailed initial workload estimation
+- Better integration of concurrent project demands
+- Clear criteria for scope change decisions
+
+##### Team Processes
+
+- Regular checkpoints for scope evaluation
+- Clear communication channels for raising concerns
+- Defined process for scope change decisions
+
+#### Conclusion
+
+While the project didn't result in the initially planned battleship game, 
+the team demonstrated remarkable adaptability and pragmatism in pivoting to 
+a successful Q&A game. The experience provided valuable insights into project 
+management, scope control, and team dynamics that will benefit future projects.
+The successful delivery of the final product, despite the challenges, showcases
+the teams resiliance and problem-solving capabilities.
+
+
+
+
