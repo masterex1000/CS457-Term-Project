@@ -131,14 +131,17 @@ The project spanned the length of the semester with:
 
 #### Initial Phase - Battleship Game
 
-1. Increasing code complexity
-   - Additional Features led to mounting technical complexity
-   - Integration challenges with new functionality
-   - Growing Technical Debt
-2. Resource Constraints
-   - Competing priorities from other concurrent classes and projects
-   - Fixed deadline pressure
-   - Limited bandwidth for handling expanding scope
+##### Increasing code complexity
+
+- Additional Features led to mounting technical complexity
+- Integration challenges with new functionality
+- Growing Technical Debt
+  
+##### Resource Constraints
+
+- Competing priorities from other concurrent classes and projects
+- Fixed deadline pressure
+- Limited bandwidth for handling expanding scope
 
 #### Adaptation and Solution
 
